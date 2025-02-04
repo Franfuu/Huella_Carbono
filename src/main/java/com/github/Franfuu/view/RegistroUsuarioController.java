@@ -4,28 +4,23 @@ import com.github.Franfuu.App;
 import com.github.Franfuu.model.dao.UsuarioDAO;
 import com.github.Franfuu.model.entities.Usuario;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import javafx.scene.control.Alert.AlertType;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 
 public class RegistroUsuarioController extends Controller {
     @Override
     public void onOpen(Object input) throws Exception {
-
     }
 
     @Override
     public void onClose(Object output) {
-
     }
 
     @FXML
@@ -36,8 +31,6 @@ public class RegistroUsuarioController extends Controller {
     private PasswordField passwordField;
     @FXML
     private Button registerButton;
-    @FXML
-    private Text registerMessage;
     @FXML
     private Button welcomeButton;
 
@@ -53,17 +46,16 @@ public class RegistroUsuarioController extends Controller {
         LocalDate registrationDate = LocalDate.now();
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            registerMessage.setText("Please fill in all fields.");
+            showAlert(AlertType.WARNING, "Warning", "Please fill in all fields.");
         } else {
             try {
                 saveUserToDatabase(name, email, password, registrationDate);
-                registerMessage.setText("Registration successful.");
+                showAlert(AlertType.INFORMATION, "Success", "Registration successful.");
             } catch (SQLException e) {
-                registerMessage.setText("Registration failed: " + e.getMessage());
+                showAlert(AlertType.ERROR, "Error", "Registration failed: " + e.getMessage());
             }
         }
     }
-
 
     private void saveUserToDatabase(String nombre, String email, String contraseña, LocalDate registrationDate) throws SQLException {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -74,6 +66,14 @@ public class RegistroUsuarioController extends Controller {
         usuario.setFechaRegistro(registrationDate.atStartOfDay().toInstant(ZoneOffset.UTC));
 
         usuarioDAO.insert(usuario);
+    }
+
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void setWelcomeButton() throws Exception {

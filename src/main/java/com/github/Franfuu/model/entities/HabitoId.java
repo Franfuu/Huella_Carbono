@@ -4,16 +4,27 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import org.hibernate.Hibernate;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
-public class HabitoId implements java.io.Serializable {
+public class HabitoId implements Serializable {
     private static final long serialVersionUID = 939544220021127585L;
+
+    public HabitoId(Integer idUsuario, Integer idActividad) {
+        this.idUsuario = idUsuario;
+        this.idActividad = idActividad;
+    }
+
     @Column(name = "id_usuario", nullable = false)
     private Integer idUsuario;
 
     @Column(name = "id_actividad", nullable = false)
     private Integer idActividad;
+
+    public HabitoId() {
+
+    }
 
     public Integer getIdUsuario() {
         return idUsuario;

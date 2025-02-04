@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.AgregarHuellaController">
+    <children>
+        <Label layoutX="50.0" layoutY="30.0" text="Valor:" />
+        <TextField fx:id="valorField" layoutX="150.0" layoutY="30.0" />
+
+        <Label layoutX="50.0" layoutY="70.0" text="Unidad:" />
+        <TextField fx:id="unidadField" layoutX="150.0" layoutY="70.0" />
+
+        <Label layoutX="50.0" layoutY="110.0" text="Actividad:" />
+        <ComboBox fx:id="actividadComboBox" layoutX="150.0" layoutY="110.0" />
+
+        <Button fx:id="saveButton" layoutX="150.0" layoutY="150.0" text="Guardar" />
+    </children>
+</AnchorPane>

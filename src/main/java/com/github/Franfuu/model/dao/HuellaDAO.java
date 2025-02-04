@@ -1,4 +1,3 @@
-// HuellaDAO.java
 package com.github.Franfuu.model.dao;
 
 import com.github.Franfuu.model.connection.Connection;
@@ -34,7 +33,7 @@ public class HuellaDAO {
         Session session = connection.getInstance().getSessionFactory();
         session.beginTransaction();
         List<Huella> huellas = session.createQuery("from Huella h where h.idUsuario = :usuario", Huella.class)
-                .setParameter("usuario", usuario.getId())
+                .setParameter("usuario", usuario)
                 .list();
         session.getTransaction().commit();
         session.close();
