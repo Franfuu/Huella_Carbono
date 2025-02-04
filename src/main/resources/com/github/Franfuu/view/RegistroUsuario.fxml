@@ -13,6 +13,5 @@
         <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="150.0" promptText="Password" />
         <Button fx:id="registerButton" layoutX="200.0" layoutY="200.0" text="Register" />
         <Button fx:id="welcomeButton" layoutX="200.0" layoutY="250.0" onAction="#setWelcomeButton" text="Welcome" />
-        <Text fx:id="registerMessage" layoutX="200.0" layoutY="300.0" />
     </children>
 </AnchorPane>

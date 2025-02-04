@@ -5,8 +5,10 @@ import com.github.Franfuu.model.entities.Usuario;
 import com.github.Franfuu.App;
 import com.github.Franfuu.utils.UsuarioSesion;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 
 public class InicioSesionUsuarioController extends Controller {
 
@@ -46,18 +48,27 @@ public class InicioSesionUsuarioController extends Controller {
         String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            System.out.println("Por favor, rellene todos los campos");
+            showAlert(AlertType.WARNING, "Warning", "Please fill in all fields.");
         } else {
             boolean isValidUser = usuarioService.validateUser(email, password);
 
             if (isValidUser) {
                 Usuario usuario = usuarioService.findByEmailAndPassword(email, password);
                 UsuarioSesion.getInstance().setUserLogged(usuario);
+                showAlert(AlertType.CONFIRMATION, "Sesión Iniciada", "La sesion se ha iniciado correctamente.");
                 App.currentController.changeScene(Scenes.MAINPAGE, usuario);
             } else {
-                System.out.println("Usuario no encontrado o contraseña incorrecta");
+                showAlert(AlertType.ERROR, "Error", "User not found or incorrect password.");
             }
         }
+    }
+
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void setWelcomeButton() throws Exception {
