@@ -19,5 +19,7 @@
         </TableView>
         <Button fx:id="addHabitoButton" layoutX="206.0" layoutY="269.0" text="Agregar Hábito" />
         <Button fx:id="addHuellaButton" layoutX="50.0" layoutY="270.0" text="Agregar Huella" />
+        <Button fx:id="verHabitosButton" layoutX="50.0" layoutY="360.0" text="Ver Hábitos" />
+        <Button fx:id="calcularImpactoButton" layoutX="50.0" layoutY="250.0" text="Ver Impacto de Carbono" onAction="#openImpactoCarbonoModal" />
     </children>
 </AnchorPane>
