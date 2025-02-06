@@ -45,12 +45,21 @@ public class EditHuellaController extends Controller {
     }
 
     @FXML
-    private void initialize() {
+    private void initialize() throws Exception {
         actividadComboBox.setItems(FXCollections.observableArrayList(loadActividades()));
-        updateButton.setOnAction(event -> saveHuella());
+        updateButton.setOnAction(event -> {
+            try {
+                saveHuella();
+                App.currentController.changeScene(Scenes.MAINPAGE, null);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         if (huella != null) {
             setHuella(huella);
         }
+
+
     }
 
     public void setHuella(Huella huella) {
@@ -60,8 +69,7 @@ public class EditHuellaController extends Controller {
         unidadField.setText(huella.getUnidad());
         fechaPicker.setValue(LocalDate.ofInstant(huella.getFecha(), ZoneId.systemDefault()));
     }
-    @FXML
-    private void saveHuella() {
+    private void saveHuella() throws Exception {
         huella.setIdActividad(actividadComboBox.getValue());
         huella.setValor(new BigDecimal(valorField.getText()));
         huella.setUnidad(unidadField.getText());
@@ -69,14 +77,17 @@ public class EditHuellaController extends Controller {
 
         HuellaDAO huellaDAO = new HuellaDAO();
         huellaDAO.update(huella);
-        try {
-            App.currentController.changeScene(Scenes.MAINPAGE, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        // Close the modal
+        Stage stage = (Stage) updateButton.getScene().getWindow();
+        stage.close();
     }
     private List<Actividad> loadActividades() {
         ActividadDAO actividadDAO = new ActividadDAO();
         return actividadDAO.findAll();
+    }
+
+    public void setUpdateButton() throws Exception {
+        App.currentController.changeScene(Scenes.MAINPAGE, null);
     }
 }
