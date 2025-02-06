@@ -6,7 +6,7 @@ import org.hibernate.cfg.Configuration;
 
 public class Connection {
     private static Connection _instance;
-    private static SessionFactory sessionFactory;
+    public static SessionFactory sessionFactory;
 
     private Connection() {
         try {

@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,6 +19,15 @@ import java.time.ZoneId;
 import java.util.List;
 
 public class AgregarHabitoController extends Controller {
+    @Override
+    public void onOpen(Object input) throws Exception {
+
+    }
+
+    @Override
+    public void onClose(Object output) {
+
+    }
 
     @FXML
     private ComboBox<Actividad> actividadComboBox;
@@ -26,9 +36,10 @@ public class AgregarHabitoController extends Controller {
     @FXML
     private DatePicker ultimaFechaPicker;
     @FXML
-    private Button saveButton;
-    @FXML
     private TextField tipoField;
+    @FXML
+    private Button saveButton;
+
     @FXML
     private void initialize() {
         loadActividades();
@@ -65,15 +76,9 @@ public class AgregarHabitoController extends Controller {
 
         HabitoDAO habitoDAO = new HabitoDAO();
         habitoDAO.insert(habito);
-    }
 
-    @Override
-    public void onOpen(Object input) throws Exception {
-        loadActividades();
-    }
-
-    @Override
-    public void onClose(Object output) {
-
+        // Close the modal
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        stage.close();
     }
 }

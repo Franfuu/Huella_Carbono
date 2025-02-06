@@ -2,17 +2,16 @@ package com.github.Franfuu.view;
 
 import com.github.Franfuu.model.dao.HabitoDAO;
 import com.github.Franfuu.model.entities.Habito;
+import com.github.Franfuu.model.entities.Recomendacion;
 import com.github.Franfuu.model.entities.Usuario;
+import com.github.Franfuu.services.HabitoService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.Button;
 import javafx.util.converter.IntegerStringConverter;
 
 import java.time.Instant;
@@ -20,6 +19,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HabitosUsuarioController extends Controller {
     @FXML
@@ -36,9 +36,7 @@ public class HabitosUsuarioController extends Controller {
     private TableColumn<Habito, Void> deleteColumn;
 
     private ObservableList<Habito> habitosList;
-
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     @Override
     public void onOpen(Object input) throws Exception {
         Usuario usuario = (Usuario) input;

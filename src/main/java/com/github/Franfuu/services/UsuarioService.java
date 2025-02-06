@@ -19,4 +19,8 @@ public class UsuarioService {
     public void saveUser(Usuario usuario) {
         usuarioDAO.insert(usuario);
     }
+
+    public void update(Usuario usuario) {
+        usuarioDAO.update(usuario);
+    }
 }

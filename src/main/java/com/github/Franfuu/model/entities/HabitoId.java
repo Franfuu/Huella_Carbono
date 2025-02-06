@@ -55,5 +55,4 @@ public class HabitoId implements Serializable {
     public int hashCode() {
         return Objects.hash(idActividad, idUsuario);
     }
-
 }
