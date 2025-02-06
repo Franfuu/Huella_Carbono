@@ -5,6 +5,8 @@ import com.github.Franfuu.model.entities.Huella;
 import com.github.Franfuu.model.entities.Usuario;
 import org.hibernate.Session;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HuellaDAO {
@@ -34,6 +36,19 @@ public class HuellaDAO {
         session.beginTransaction();
         List<Huella> huellas = session.createQuery("from Huella h where h.idUsuario = :usuario", Huella.class)
                 .setParameter("usuario", usuario)
+                .list();
+        session.getTransaction().commit();
+        session.close();
+        return huellas;
+    }
+    public List<Huella> findByUsuarioAndFechaBetween(Usuario usuario, Instant inicio, Instant fin) {
+        Connection connection = Connection.getInstance();
+        Session session = connection.getInstance().getSessionFactory();
+        session.beginTransaction();
+        List<Huella> huellas = session.createQuery("from Huella h where h.idUsuario = :usuario and h.fecha between :inicio and :fin", Huella.class)
+                .setParameter("usuario", usuario)
+                .setParameter("inicio", inicio)
+                .setParameter("fin", fin)
                 .list();
         session.getTransaction().commit();
         session.close();

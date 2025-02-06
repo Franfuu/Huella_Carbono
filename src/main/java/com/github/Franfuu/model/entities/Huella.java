@@ -5,6 +5,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "huella", schema = "eco")
@@ -83,5 +85,10 @@ public class Huella {
     @Override
     public String toString() {
         return idActividad.getNombre();
+    }
+
+    public LocalDate getFechaAsLocalDate() {
+        Instant instant = getFecha();
+        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
     }
 }
