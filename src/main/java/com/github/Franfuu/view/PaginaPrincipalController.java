@@ -5,6 +5,8 @@ import com.github.Franfuu.model.entities.Huella;
 import com.github.Franfuu.model.entities.Recomendacion;
 import com.github.Franfuu.services.HabitoService;
 import com.github.Franfuu.services.HuellaService;
+import com.github.Franfuu.utils.GenerarCSV;
+import com.github.Franfuu.utils.GenerarPDF;
 import com.github.Franfuu.utils.UsuarioSesion;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -143,6 +145,7 @@ public class PaginaPrincipalController extends Controller {
 
         addButtonToTable();
         addRecomendacionButtonToTable();
+        generateDocumentationButton.setOnAction(event -> generateDocumentation());
     }
 
     private void addRecomendacionButtonToTable() {
@@ -177,6 +180,27 @@ public class PaginaPrincipalController extends Controller {
             }
         };
         recomendacionColumn.setCellFactory(cellFactory);
+    }
+
+    @FXML
+    private void generateDocumentation() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Generar Reporte");
+        alert.setHeaderText("Seleccione el formato del reporte");
+
+        ButtonType pdfButton = new ButtonType("Generar PDF");
+        ButtonType csvButton = new ButtonType("Generar CSV");
+        ButtonType cancelButton = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(pdfButton, csvButton, cancelButton);
+
+        alert.showAndWait().ifPresent(type -> {
+            if (type == pdfButton) {
+                huellaService.generatePDF(huellaList, (Stage) generateDocumentationButton.getScene().getWindow());
+            } else if (type == csvButton) {
+                huellaService.generateCSV(huellaList, (Stage) generateDocumentationButton.getScene().getWindow());
+            }
+        });
     }
 
     private void mostrarRecomendaciones(Huella huella) throws Exception {
