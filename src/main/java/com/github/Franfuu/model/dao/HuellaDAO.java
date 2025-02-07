@@ -33,7 +33,11 @@ public class HuellaDAO {
         Connection connection = Connection.getInstance();
         Session session = connection.getInstance().getSessionFactory();
         session.beginTransaction();
-        List<Huella> huellas = session.createQuery("from Huella h where h.idUsuario = :usuario", Huella.class)
+        List<Huella> huellas = session.createQuery(
+                        "from Huella h " +
+                                "join fetch h.idActividad a " +
+                                "join fetch a.idCategoria " +
+                                "where h.idUsuario = :usuario", Huella.class)
                 .setParameter("usuario", usuario)
                 .list();
         session.getTransaction().commit();
@@ -49,6 +53,7 @@ public class HuellaDAO {
                         "SELECT h FROM Huella h " +
                                 "JOIN FETCH h.idUsuario u " +
                                 "JOIN FETCH h.idActividad a " +
+                                "JOIN FETCH a.idCategoria " +
                                 "WHERE u.id = :usuarioId", Huella.class)
                 .setParameter("usuarioId", usuarioId)
                 .list();
@@ -56,11 +61,16 @@ public class HuellaDAO {
         session.close();
         return huellas;
     }
+
     public List<Huella> findByUsuarioAndFechaBetween(Usuario usuario, Instant inicio, Instant fin) {
         Connection connection = Connection.getInstance();
         Session session = connection.getInstance().getSessionFactory();
         session.beginTransaction();
-        List<Huella> huellas = session.createQuery("from Huella h where h.idUsuario = :usuario and h.fecha between :inicio and :fin", Huella.class)
+        List<Huella> huellas = session.createQuery(
+                        "from Huella h " +
+                                "join fetch h.idActividad a " +
+                                "join fetch a.idCategoria " +
+                                "where h.idUsuario = :usuario and h.fecha between :inicio and :fin", Huella.class)
                 .setParameter("usuario", usuario)
                 .setParameter("inicio", inicio)
                 .setParameter("fin", fin)

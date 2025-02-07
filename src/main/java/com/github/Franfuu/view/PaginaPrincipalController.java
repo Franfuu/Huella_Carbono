@@ -183,6 +183,24 @@ public class PaginaPrincipalController extends Controller {
     }
 
     @FXML
+    private void openCompararUsuarios() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/Franfuu/view/CompararUsuarios.fxml"));
+            Parent root = loader.load();
+
+            CompararUsuariosController controller = loader.getController();
+            controller.setUsuarioLogueado(UsuarioSesion.getInstance().getUserLogged());
+
+            Stage stage = new Stage();
+            stage.setTitle("Comparar Usuarios");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void generateDocumentation() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Generar Reporte");

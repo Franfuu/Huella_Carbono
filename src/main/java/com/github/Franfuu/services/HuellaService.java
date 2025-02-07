@@ -7,10 +7,14 @@ import com.github.Franfuu.model.entities.Recomendacion;
 import com.github.Franfuu.model.entities.Usuario;
 import com.github.Franfuu.utils.GenerarCSV;
 import com.github.Franfuu.utils.GenerarPDF;
+import com.github.Franfuu.utils.UsuarioSesion;
 import javafx.stage.Stage;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class HuellaService {
 
@@ -55,4 +59,25 @@ public class HuellaService {
     public List<Huella> findByUsuarioAndFechaBetween(Usuario usuario, Instant inicio, Instant fin) {
         return huellaDAO.findByUsuarioAndFechaBetween(usuario, inicio, fin);
     }
+
+    public Map<String, BigDecimal> getAverageCarbonFootprintByCategory() {
+        List<Huella> huellas = huellaDAO.findAllByUsuario(UsuarioSesion.getInstance().getUserLogged());
+        return huellas.stream()
+                .collect(Collectors.groupingBy(
+                        huella -> huella.getIdActividad().getIdCategoria().getNombre(),
+                        Collectors.averagingDouble(huella -> huella.getValor().doubleValue())
+                ))
+                .entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> BigDecimal.valueOf(entry.getValue())));
+    }
+
+    public Map<String, BigDecimal> getUserCarbonFootprintByCategory(Usuario usuario) {
+        List<Huella> huellas = huellaDAO.findAllByUsuario(usuario);
+        return huellas.stream()
+                .collect(Collectors.groupingBy(
+                        huella -> huella.getIdActividad().getIdCategoria().getNombre(),
+                        Collectors.reducing(BigDecimal.ZERO, Huella::getValor, BigDecimal::add)
+                ));
+    }
+
 }
