@@ -5,9 +5,9 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.PaginaPrincipalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.PaginaPrincipalController">
     <children>
-        <TableView fx:id="huellaTable" editable="true" layoutX="50.0" layoutY="50.0" prefHeight="200.0" prefWidth="600.0">
+        <TableView fx:id="huellaTable" editable="true" layoutX="122.0" layoutY="109.0" prefHeight="382.0" prefWidth="600.0">
             <columns>
                 <TableColumn fx:id="idColumn" text="ID" />
                 <TableColumn fx:id="actividadColumn" text="Nombre" />
@@ -15,13 +15,15 @@
                 <TableColumn fx:id="unidadColumn" text="Unidad" />
                 <TableColumn fx:id="fechaColumn" text="Fecha" />
                 <TableColumn fx:id="actionColumn" text="Action" />
-                <TableColumn fx:id="recomendacionColumn" text="Recomendaciones" />
+                <TableColumn fx:id="recomendacionColumn" prefWidth="119.20001220703125" text="Recomendaciones" />
             </columns>
         </TableView>
-        <Button fx:id="addHabitoButton" layoutX="206.0" layoutY="269.0" text="Agregar Hábito" />
-        <Button fx:id="addHuellaButton" layoutX="50.0" layoutY="270.0" text="Agregar Huella" />
-        <Button fx:id="verHabitosButton" layoutX="50.0" layoutY="360.0" text="Ver Hábitos" />
-        <Button fx:id="editUserButton" text="Edit User" layoutX="200.0" layoutY="300.0" />
-        <Button fx:id="calcularImpactoButton" layoutX="50.0" layoutY="250.0" text="Ver Impacto de Carbono" onAction="#openImpactoCarbonoModal" />
+        <Button fx:id="logoutButton" layoutX="750.0" layoutY="466.0" text="Cerrar Sesión" />
+        <Button fx:id="addHabitoButton" layoutX="449.0" layoutY="41.0" text="Agregar Hábito" />
+        <Button fx:id="addHuellaButton" layoutX="335.0" layoutY="41.0" text="Agregar Huella" />
+        <Button fx:id="verHabitosButton" layoutX="238.0" layoutY="41.0" text="Ver Hábitos" />
+        <Button fx:id="editUserButton" layoutX="755.0" layoutY="41.0" text="Mi Perfil" />
+        <Button fx:id="generateDocumentationButton" layoutX="116.0" layoutY="41.0" text="Generar Reporte" />
+        <Button fx:id="calcularImpactoButton" layoutX="575.0" layoutY="41.0" onAction="#openImpactoCarbonoModal" text="Ver Impacto de Carbono" />
     </children>
 </AnchorPane>

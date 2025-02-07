@@ -3,6 +3,8 @@ package com.github.Franfuu.services;
 import com.github.Franfuu.model.dao.UsuarioDAO;
 import com.github.Franfuu.model.entities.Usuario;
 
+import java.util.List;
+
 public class UsuarioService {
 
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -22,5 +24,17 @@ public class UsuarioService {
 
     public void update(Usuario usuario) {
         usuarioDAO.update(usuario);
+    }
+
+    public void delete(Usuario usuario) {
+        usuarioDAO.delete(usuario);
+    }
+
+    public Usuario findById(Integer id) {
+        return usuarioDAO.findById(id);
+    }
+
+    public List<Usuario> findAll() {
+        return usuarioDAO.findAll();
     }
 }

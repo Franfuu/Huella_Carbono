@@ -10,7 +10,7 @@
     <children>
         <TextField fx:id="emailField" layoutX="200.0" layoutY="100.0" promptText="Email" />
         <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="150.0" promptText="Password" />
-        <Button fx:id="loginButton" layoutX="210.0" layoutY="197.0" onAction="#handleLogin" text="Login" />
+        <Button fx:id="loginButton" layoutX="210.0" layoutY="197.0" onAction="#login" text="Login" />
         <Button fx:id="welcomeButton" layoutX="200.0" layoutY="250.0" onAction="#setWelcomeButton" text="Welcome" />
 
     </children>

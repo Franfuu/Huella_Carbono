@@ -2,15 +2,12 @@ package com.github.Franfuu.view;
 
 import com.github.Franfuu.App;
 import com.github.Franfuu.model.dao.ActividadDAO;
-import com.github.Franfuu.model.dao.HuellaDAO;
 import com.github.Franfuu.model.entities.Actividad;
 import com.github.Franfuu.model.entities.Huella;
+import com.github.Franfuu.services.HuellaService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.math.BigDecimal;
@@ -18,7 +15,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EditHuellaController extends Controller {
 
@@ -34,6 +30,7 @@ public class EditHuellaController extends Controller {
     private Button updateButton;
 
     private Huella huella;
+    private final HuellaService huellaService = new HuellaService();
 
     @Override
     public void onOpen(Object input) throws Exception {
@@ -49,7 +46,7 @@ public class EditHuellaController extends Controller {
         actividadComboBox.setItems(FXCollections.observableArrayList(loadActividades()));
         updateButton.setOnAction(event -> {
             try {
-                saveHuella();
+                updateHuella();
                 App.currentController.changeScene(Scenes.MAINPAGE, null);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -58,8 +55,6 @@ public class EditHuellaController extends Controller {
         if (huella != null) {
             setHuella(huella);
         }
-
-
     }
 
     public void setHuella(Huella huella) {
@@ -69,19 +64,51 @@ public class EditHuellaController extends Controller {
         unidadField.setText(huella.getUnidad());
         fechaPicker.setValue(LocalDate.ofInstant(huella.getFecha(), ZoneId.systemDefault()));
     }
-    private void saveHuella() throws Exception {
+
+    private void updateHuella() throws Exception {
+        if (actividadComboBox.getValue() == null) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "Por favor, seleccione una actividad.");
+            return;
+        }
+        if (valorField.getText().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "Por favor, ingrese un valor.");
+            return;
+        }
+        if (unidadField.getText().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "Por favor, ingrese una unidad.");
+            return;
+        }
+        if (fechaPicker.getValue() == null) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "Por favor, seleccione una fecha.");
+            return;
+        }
+        if (fechaPicker.getValue().isAfter(LocalDate.now())) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "La fecha no puede ser futura.");
+            return;
+        }
+
         huella.setIdActividad(actividadComboBox.getValue());
         huella.setValor(new BigDecimal(valorField.getText()));
         huella.setUnidad(unidadField.getText());
         huella.setFecha(fechaPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        HuellaDAO huellaDAO = new HuellaDAO();
-        huellaDAO.update(huella);
+        huellaService.updateHuella(huella);
+
+        showAlert(Alert.AlertType.INFORMATION, "Éxito", "Huella actualizada correctamente.");
 
         // Close the modal
         Stage stage = (Stage) updateButton.getScene().getWindow();
         stage.close();
     }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     private List<Actividad> loadActividades() {
         ActividadDAO actividadDAO = new ActividadDAO();
         return actividadDAO.findAll();

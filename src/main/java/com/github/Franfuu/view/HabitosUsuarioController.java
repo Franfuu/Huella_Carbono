@@ -1,8 +1,6 @@
 package com.github.Franfuu.view;
 
-import com.github.Franfuu.model.dao.HabitoDAO;
 import com.github.Franfuu.model.entities.Habito;
-import com.github.Franfuu.model.entities.Recomendacion;
 import com.github.Franfuu.model.entities.Usuario;
 import com.github.Franfuu.services.HabitoService;
 import javafx.collections.FXCollections;
@@ -10,18 +8,17 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.Callback;
-import javafx.util.converter.IntegerStringConverter;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HabitosUsuarioController extends Controller {
+    private final HabitoService habitoService = new HabitoService();
+
     @FXML
     private TableView<Habito> habitosTableView;
     @FXML
@@ -37,6 +34,7 @@ public class HabitosUsuarioController extends Controller {
 
     private ObservableList<Habito> habitosList;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     @Override
     public void onOpen(Object input) throws Exception {
         Usuario usuario = (Usuario) input;
@@ -48,8 +46,7 @@ public class HabitosUsuarioController extends Controller {
     }
 
     private void loadHabitos(Usuario usuario) {
-        HabitoDAO habitoDAO = new HabitoDAO();
-        List<Habito> habitos = habitoDAO.findAllByUsuario(usuario);
+        List<Habito> habitos = habitoService.findAllByUsuario(usuario);
         habitosList = FXCollections.observableArrayList(habitos);
 
         actividadColumn.setCellValueFactory(new PropertyValueFactory<>("idActividad"));
@@ -104,8 +101,16 @@ public class HabitosUsuarioController extends Controller {
     }
 
     private void deleteHabito(Habito habito) {
-        HabitoDAO habitoDAO = new HabitoDAO();
-        habitoDAO.delete(habito);
+        habitoService.deleteHabito(habito);
         habitosList.remove(habito);
+        showAlert(Alert.AlertType.INFORMATION, "Éxito", "Hábito eliminado correctamente.");
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

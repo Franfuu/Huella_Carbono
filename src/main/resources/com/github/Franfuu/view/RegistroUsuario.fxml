@@ -4,14 +4,13 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.RegistroUsuarioController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.RegistroUsuarioController">
     <children>
-        <TextField fx:id="nameField" layoutX="200.0" layoutY="50.0" promptText="Name" />
-        <TextField fx:id="emailField" layoutX="200.0" layoutY="100.0" promptText="Email" />
-        <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="150.0" promptText="Password" />
-        <Button fx:id="registerButton" layoutX="200.0" layoutY="200.0" text="Register" />
-        <Button fx:id="welcomeButton" layoutX="200.0" layoutY="250.0" onAction="#setWelcomeButton" text="Welcome" />
+        <TextField fx:id="nameField" layoutX="400.0" layoutY="273.0" promptText="Name" />
+        <TextField fx:id="emailField" layoutX="400.0" layoutY="334.0" promptText="Email" />
+        <PasswordField fx:id="passwordField" layoutX="400.0" layoutY="396.0" promptText="Password" />
+        <Button fx:id="registerButton" layoutX="445.0" layoutY="461.0" text="Register" />
+        <Button fx:id="welcomeButton" layoutX="442.0" layoutY="527.0" onAction="#setWelcomeButton" text="Welcome" />
     </children>
 </AnchorPane>

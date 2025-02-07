@@ -1,16 +1,13 @@
 package com.github.Franfuu.view;
 
 import com.github.Franfuu.model.dao.ActividadDAO;
-import com.github.Franfuu.model.dao.HabitoDAO;
 import com.github.Franfuu.model.entities.Actividad;
 import com.github.Franfuu.model.entities.Habito;
 import com.github.Franfuu.model.entities.HabitoId;
+import com.github.Franfuu.services.HabitoService;
 import com.github.Franfuu.utils.UsuarioSesion;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.time.Instant;
@@ -19,14 +16,14 @@ import java.time.ZoneId;
 import java.util.List;
 
 public class AgregarHabitoController extends Controller {
+    private final HabitoService habitoService = new HabitoService();
+
     @Override
     public void onOpen(Object input) throws Exception {
-
     }
 
     @Override
     public void onClose(Object output) {
-
     }
 
     @FXML
@@ -52,17 +49,32 @@ public class AgregarHabitoController extends Controller {
         actividadComboBox.getItems().addAll(actividades);
     }
 
+    @FXML
     private void saveHabito() {
         Actividad actividad = actividadComboBox.getValue();
+        if (actividad == null) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "Por favor, seleccione una actividad.");
+            return;
+        }
+
         String frecuenciaText = frecuenciaField.getText();
         Integer frecuencia;
         try {
             frecuencia = Integer.parseInt(frecuenciaText);
         } catch (NumberFormatException e) {
-            System.out.println("Invalid frequency: " + frecuenciaText);
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "Frecuencia inválida: " + frecuenciaText);
             return;
         }
+
         LocalDate ultimaFecha = ultimaFechaPicker.getValue();
+        if (ultimaFecha == null) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "Por favor, seleccione una fecha.");
+            return;
+        }
+        if (ultimaFecha.isAfter(LocalDate.now())) {
+            showAlert(Alert.AlertType.WARNING, "Advertencia", "La fecha no puede ser futura.");
+            return;
+        }
         Instant ultimaFechaInstant = ultimaFecha.atStartOfDay(ZoneId.systemDefault()).toInstant();
         String tipo = tipoField.getText();
 
@@ -74,11 +86,19 @@ public class AgregarHabitoController extends Controller {
         habito.setUltimaFecha(ultimaFechaInstant);
         habito.setTipo(tipo);
 
-        HabitoDAO habitoDAO = new HabitoDAO();
-        habitoDAO.insert(habito);
+        habitoService.saveHabito(habito);
 
-        // Close the modal
+        showAlert(Alert.AlertType.INFORMATION, "Éxito", "Hábito agregado correctamente.");
+
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

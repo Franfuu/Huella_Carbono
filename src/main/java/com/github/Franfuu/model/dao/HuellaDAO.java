@@ -6,7 +6,6 @@ import com.github.Franfuu.model.entities.Usuario;
 import org.hibernate.Session;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class HuellaDAO {
@@ -36,6 +35,22 @@ public class HuellaDAO {
         session.beginTransaction();
         List<Huella> huellas = session.createQuery("from Huella h where h.idUsuario = :usuario", Huella.class)
                 .setParameter("usuario", usuario)
+                .list();
+        session.getTransaction().commit();
+        session.close();
+        return huellas;
+    }
+
+    public List<Huella> findAll(String usuarioId) {
+        Connection connection = Connection.getInstance();
+        Session session = connection.getInstance().getSessionFactory();
+        session.beginTransaction();
+        List<Huella> huellas = session.createQuery(
+                        "SELECT h FROM Huella h " +
+                                "JOIN FETCH h.idUsuario u " +
+                                "JOIN FETCH h.idActividad a " +
+                                "WHERE u.id = :usuarioId", Huella.class)
+                .setParameter("usuarioId", usuarioId)
                 .list();
         session.getTransaction().commit();
         session.close();

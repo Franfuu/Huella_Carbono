@@ -1,12 +1,10 @@
 package com.github.Franfuu.view;
 
 import com.github.Franfuu.App;
-import com.github.Franfuu.model.dao.HuellaDAO;
-import com.github.Franfuu.model.dao.ActividadDAO;
 import com.github.Franfuu.model.entities.Huella;
-import com.github.Franfuu.model.entities.Actividad;
 import com.github.Franfuu.model.entities.Recomendacion;
 import com.github.Franfuu.services.HabitoService;
+import com.github.Franfuu.services.HuellaService;
 import com.github.Franfuu.utils.UsuarioSesion;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -29,8 +27,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.mysql.cj.util.TimeUtil.DATE_FORMATTER;
 
 public class PaginaPrincipalController extends Controller {
 
@@ -60,9 +56,14 @@ public class PaginaPrincipalController extends Controller {
     private Button editUserButton;
     @FXML
     private TableColumn<Huella, Void> recomendacionColumn;
+    @FXML
+    private Button generateDocumentationButton;
 
     private ObservableList<Huella> huellaList;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    private final HuellaService huellaService = new HuellaService();
+    private final HabitoService habitoService = new HabitoService();
 
     @Override
     public void onOpen(Object input) throws Exception {
@@ -103,7 +104,7 @@ public class PaginaPrincipalController extends Controller {
 
         addHuellaButton.setOnAction(event -> {
             try {
-                App.currentController.changeScene(Scenes.ADDHUELLA, null);
+                openAgregarHuellaModal();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -140,11 +141,9 @@ public class PaginaPrincipalController extends Controller {
             }
         });
 
-
         addButtonToTable();
         addRecomendacionButtonToTable();
     }
-
 
     private void addRecomendacionButtonToTable() {
         Callback<TableColumn<Huella, Void>, TableCell<Huella, Void>> cellFactory = new Callback<>() {
@@ -181,7 +180,6 @@ public class PaginaPrincipalController extends Controller {
     }
 
     private void mostrarRecomendaciones(Huella huella) throws Exception {
-        HabitoService habitoService = new HabitoService();
         List<Recomendacion> recomendaciones = habitoService.getRecomendacionesPorHuella(huella);
 
         if (recomendaciones == null || recomendaciones.isEmpty()) {
@@ -190,27 +188,31 @@ public class PaginaPrincipalController extends Controller {
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Recomendaciones");
-        alert.setHeaderText("Recomendaciones para la huella ID: " + huella.getId());
+        alert.setHeaderText("Recomendaciones para la huella ID: " + huella.getId().toString());
         alert.setContentText(recomendaciones.stream()
                 .map(Recomendacion::getDescripcion)
                 .collect(Collectors.joining("\n")));
         alert.showAndWait();
     }
 
-
-
     private void loadHuellas() {
-        HuellaDAO huellaDAO = new HuellaDAO();
-        List<Huella> huellas = huellaDAO.findAllByUsuario(UsuarioSesion.getInstance().getUserLogged());
+        List<Huella> huellas = huellaService.findAllByUsuario(UsuarioSesion.getInstance().getUserLogged());
         huellaList = FXCollections.observableArrayList(huellas);
         huellaTable.setItems(huellaList);
     }
 
-
     private void deleteHuella(Huella huella) {
-        HuellaDAO huellaDAO = new HuellaDAO();
-        huellaDAO.delete(huella);
+        huellaService.deleteHuella(huella);
         huellaList.remove(huella);
+        showAlert(Alert.AlertType.INFORMATION, "Éxito", "Huella eliminada correctamente.");
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     private void openEditUserModal() throws Exception {
@@ -240,6 +242,17 @@ public class PaginaPrincipalController extends Controller {
         refreshMainPage();
     }
 
+    private void openAgregarHuellaModal() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/Franfuu/view/AgregarHuella.fxml"));
+        Parent root = loader.load();
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Agregar Huella");
+        stage.setScene(new Scene(root));
+        stage.showAndWait();
+
+        refreshMainPage();
+    }
 
     private void addButtonToTable() {
         Callback<TableColumn<Huella, Void>, TableCell<Huella, Void>> cellFactory = new Callback<>() {
