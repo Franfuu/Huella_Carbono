@@ -1,19 +1,14 @@
 package com.github.Franfuu.view;
 
-import com.github.Franfuu.model.dao.HuellaDAO;
 import com.github.Franfuu.model.entities.Huella;
+import com.github.Franfuu.services.HuellaService;
 import com.github.Franfuu.utils.UsuarioSesion;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -40,6 +35,8 @@ public class ImpactoCarbonoModalController extends Controller {
     @FXML
     private Label resultadoLabel;
 
+    private final HuellaService huellaService = new HuellaService();
+
     @FXML
     private void initialize() {
         calcularButton.setOnAction(event -> calcularImpactoCarbono());
@@ -50,34 +47,31 @@ public class ImpactoCarbonoModalController extends Controller {
         LocalDate fechaFin = fechaFinPicker.getValue();
 
         if (fechaInicio == null || fechaFin == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error de Fecha");
-            alert.setHeaderText(null);
-            alert.setContentText("Por favor, seleccione ambas fechas.");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR, "Error de Fecha", "Por favor, seleccione ambas fechas.");
             return;
         }
-        if (fechaInicio != null && fechaFin != null && fechaInicio.isAfter(fechaFin)) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error de Fecha");
-            alert.setHeaderText(null);
-            alert.setContentText("La fecha de inicio no puede ser después de la fecha final, por favor, vuelvalo a rellenar.");
-            alert.showAndWait();
+        if (fechaInicio.isAfter(fechaFin)) {
+            showAlert(Alert.AlertType.ERROR, "Error de Fecha", "La fecha de inicio no puede ser después de la fecha final, por favor, vuelva a rellenar.");
             return;
         }
-
-
 
         Instant inicio = fechaInicio.atStartOfDay(ZoneId.systemDefault()).toInstant();
         Instant fin = fechaFin.atStartOfDay(ZoneId.systemDefault()).toInstant();
 
-        HuellaDAO huellaDAO = new HuellaDAO();
-        List<Huella> huellas = huellaDAO.findByUsuarioAndFechaBetween(UsuarioSesion.getInstance().getUserLogged(), inicio, fin);
+        List<Huella> huellas = huellaService.findByUsuarioAndFechaBetween(UsuarioSesion.getInstance().getUserLogged(), inicio, fin);
 
         BigDecimal impactoTotal = huellas.stream()
                 .map(Huella::getValor)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         resultadoLabel.setText("Impacto de Carbono: " + impactoTotal.toString());
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

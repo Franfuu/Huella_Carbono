@@ -3,6 +3,7 @@ package com.github.Franfuu.model.dao;
 
 import com.github.Franfuu.model.connection.Connection;
 import com.github.Franfuu.model.entities.Habito;
+import com.github.Franfuu.model.entities.HabitoId;
 import com.github.Franfuu.model.entities.Usuario;
 import org.hibernate.Session;
 
@@ -19,7 +20,7 @@ public class HabitoDAO {
         session.close();
     }
 
-    public Habito findById(Integer id) {
+    public Habito findById(HabitoId id) {
         Connection connection = Connection.getInstance();
         Session session = connection.getInstance().getSessionFactory();
         session.beginTransaction();
