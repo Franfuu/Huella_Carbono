@@ -24,6 +24,7 @@ public class HuellaService {
         this.recomendacionDAO = new RecomendacionDAO();
     }
 
+    // Guarda una huella en la base de datos, validando que la fecha no sea futura
     public void saveHuella(Huella huella) {
         if (huella.getFecha().isAfter(Instant.now())) {
             throw new IllegalArgumentException("La fecha no puede ser futura.");
@@ -31,6 +32,7 @@ public class HuellaService {
         huellaDAO.insert(huella);
     }
 
+    // Actualiza una huella en la base de datos, validando que la fecha no sea futura
     public void updateHuella(Huella huella) {
         if (huella.getFecha().isAfter(Instant.now())) {
             throw new IllegalArgumentException("La fecha no puede ser futura.");
@@ -38,27 +40,32 @@ public class HuellaService {
         huellaDAO.update(huella);
     }
 
+    // Elimina una huella de la base de datos
     public void deleteHuella(Huella huella) {
         huellaDAO.delete(huella);
     }
 
+    // Encuentra todas las huellas de un usuario
     public List<Huella> findAllByUsuario(Usuario usuario) {
         return huellaDAO.findAllByUsuario(usuario);
     }
 
+    // Genera un PDF con la lista de huellas
     public void generatePDF(List<Huella> huellaList, Stage stage) {
         GenerarPDF.generatePDF(huellaList, stage);
     }
 
+    // Genera un CSV con la lista de huellas
     public void generateCSV(List<Huella> huellaList, Stage stage) {
         GenerarCSV.generateCSV(huellaList, stage);
     }
 
+    // Encuentra huellas de un usuario en un rango de fechas
     public List<Huella> findByUsuarioAndFechaBetween(Usuario usuario, Instant inicio, Instant fin) {
         return huellaDAO.findByUsuarioAndFechaBetween(usuario, inicio, fin);
     }
 
-
+    // Obtiene la huella de carbono del usuario agrupada por categoría
     public Map<String, BigDecimal> getUserCarbonFootprintByCategory(Usuario usuario) {
         List<Object[]> results = huellaDAO.findHuellaWithActividadAndCategoria(usuario);
         return results.stream()
@@ -69,5 +76,4 @@ public class HuellaService {
                                 BigDecimal::add)
                 ));
     }
-
 }

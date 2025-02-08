@@ -6,6 +6,20 @@ import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Clase que representa una categoría en el sistema.
+ *
+ * Tabla: categoria
+ * Columnas:
+ * - id_categoria: Identificador único de la categoría.
+ * - nombre: Nombre de la categoría.
+ * - factor_emision: Factor de emisión asociado a la categoría.
+ * - unidad: Unidad de medida del factor de emisión.
+ *
+ * Relaciones:
+ * - @OneToMany con Actividad: Una categoría puede tener múltiples actividades.
+ * - @OneToMany con Recomendacion: Una categoría puede tener múltiples recomendaciones.
+ */
 @Entity
 @Table(name = "categoria", schema = "eco")
 public class Categoria {

@@ -4,7 +4,22 @@ import jakarta.persistence.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-
+/**
+ * Clase que representa una huella en el sistema.
+ *
+ * Tabla: huella
+ * Columnas:
+ * - id_registro: Identificador único del registro de huella.
+ * - id_usuario: Referencia al usuario que generó la huella.
+ * - id_actividad: Referencia a la actividad asociada con la huella.
+ * - valor: Valor de la huella.
+ * - unidad: Unidad de medida de la huella.
+ * - fecha: Fecha en que se registró la huella.
+ *
+ * Relaciones:
+ * - @ManyToOne con Usuario: Muchas huellas pueden pertenecer a un usuario.
+ * - @ManyToOne con Actividad: Muchas huellas pueden estar asociadas a una actividad.
+ */
 @Entity
 @Table(name = "actividad", schema = "eco")
 public class Actividad {
@@ -15,6 +30,9 @@ public class Actividad {
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
+
+    // Usamos LAZY para idCategoria, habitos y huellas porque no siempre necesitamos cargar
+    // estas relaciones cuando cargamos una actividad. Esto mejora el rendimiento.
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria")
