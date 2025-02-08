@@ -3,6 +3,7 @@ package com.github.Franfuu.view;
 import com.github.Franfuu.App;
 import com.github.Franfuu.model.entities.Usuario;
 import com.github.Franfuu.services.UsuarioService;
+import com.github.Franfuu.utils.HashearContraseña;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -13,6 +14,7 @@ import javafx.scene.control.Alert.AlertType;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.regex.Pattern;
 
 public class RegistroUsuarioController extends Controller {
     @Override
@@ -49,6 +51,10 @@ public class RegistroUsuarioController extends Controller {
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             showAlert(AlertType.WARNING, "Advertencia", "Por favor, complete todos los campos.");
+        } else if (!isValidEmail(email)) {
+            showAlert(AlertType.WARNING, "Advertencia", "Por favor, introduzca un correo electrónico válido.");
+        } else if (password.length() < 8) {
+            showAlert(AlertType.WARNING, "Advertencia", "La contraseña debe tener al menos 8 caracteres.");
         } else {
             try {
                 saveUserToDatabase(name, email, password, registrationDate);
@@ -57,6 +63,11 @@ public class RegistroUsuarioController extends Controller {
                 showAlert(AlertType.ERROR, "Error", "El registro falló: " + e.getMessage());
             }
         }
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+        return Pattern.matches(emailRegex, email);
     }
 
     private void showAlert(AlertType alertType, String title, String message) {
@@ -76,8 +87,6 @@ public class RegistroUsuarioController extends Controller {
 
         usuarioService.saveUser(usuario);
     }
-
-
 
     public void setWelcomeButton() throws Exception {
         App.currentController.changeScene(Scenes.WELCOME, null);

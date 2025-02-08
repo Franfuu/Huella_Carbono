@@ -61,6 +61,22 @@ public class HuellaDAO {
         session.close();
         return huellas;
     }
+    public List<Object[]> findHuellaWithActividadAndCategoria(Usuario usuario) {
+        Connection connection = Connection.getInstance();
+        Session session = connection.getInstance().getSessionFactory();
+        session.beginTransaction();
+        List<Object[]> results = session.createQuery(
+                        "SELECT h.valor, c.factorEmision, c.nombre " +
+                                "FROM Huella h " +
+                                "JOIN h.idActividad a " +
+                                "JOIN a.idCategoria c " +
+                                "WHERE h.idUsuario = :usuario", Object[].class)
+                .setParameter("usuario", usuario)
+                .list();
+        session.getTransaction().commit();
+        session.close();
+        return results;
+    }
 
     public List<Huella> findByUsuarioAndFechaBetween(Usuario usuario, Instant inicio, Instant fin) {
         Connection connection = Connection.getInstance();

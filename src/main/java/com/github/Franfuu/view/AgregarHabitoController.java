@@ -5,7 +5,7 @@ import com.github.Franfuu.model.entities.Actividad;
 import com.github.Franfuu.model.entities.Habito;
 import com.github.Franfuu.model.entities.HabitoId;
 import com.github.Franfuu.services.HabitoService;
-import com.github.Franfuu.utils.UsuarioSesion;
+import com.github.Franfuu.model.connection.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;

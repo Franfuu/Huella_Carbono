@@ -4,13 +4,12 @@ import com.github.Franfuu.model.dao.ActividadDAO;
 import com.github.Franfuu.model.entities.Actividad;
 import com.github.Franfuu.model.entities.Huella;
 import com.github.Franfuu.services.HuellaService;
-import com.github.Franfuu.utils.UsuarioSesion;
+import com.github.Franfuu.model.connection.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;

@@ -5,9 +5,7 @@ import com.github.Franfuu.model.entities.Huella;
 import com.github.Franfuu.model.entities.Recomendacion;
 import com.github.Franfuu.services.HabitoService;
 import com.github.Franfuu.services.HuellaService;
-import com.github.Franfuu.utils.GenerarCSV;
-import com.github.Franfuu.utils.GenerarPDF;
-import com.github.Franfuu.utils.UsuarioSesion;
+import com.github.Franfuu.model.connection.UsuarioSesion;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -60,6 +58,8 @@ public class PaginaPrincipalController extends Controller {
     private TableColumn<Huella, Void> recomendacionColumn;
     @FXML
     private Button generateDocumentationButton;
+    @FXML
+    private Button logoutButton;
 
     private ObservableList<Huella> huellaList;
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -143,9 +143,22 @@ public class PaginaPrincipalController extends Controller {
             }
         });
 
+        logoutButton.setOnAction(event -> {
+            try {
+                logout();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
         addButtonToTable();
         addRecomendacionButtonToTable();
         generateDocumentationButton.setOnAction(event -> generateDocumentation());
+    }
+
+    private void logout() throws Exception {
+        UsuarioSesion.getInstance().logOut();
+        App.currentController.changeScene(Scenes.WELCOME, null);
     }
 
     private void addRecomendacionButtonToTable() {
@@ -193,12 +206,16 @@ public class PaginaPrincipalController extends Controller {
 
             Stage stage = new Stage();
             stage.setTitle("Comparar Usuarios");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.showAndWait();
+
+            refreshMainPage();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void generateDocumentation() {
@@ -235,6 +252,8 @@ public class PaginaPrincipalController extends Controller {
                 .map(Recomendacion::getDescripcion)
                 .collect(Collectors.joining("\n")));
         alert.showAndWait();
+
+        refreshMainPage();
     }
 
     private void loadHuellas() {
@@ -258,7 +277,7 @@ public class PaginaPrincipalController extends Controller {
     }
 
     private void openEditUserModal() throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/Franfuu/view/EditUser.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/github/Franfuu/view/EditUsuario.fxml"));
         Parent root = loader.load();
 
         EditUserController controller = loader.getController();
@@ -345,12 +364,11 @@ public class PaginaPrincipalController extends Controller {
         controller.setHuella(huella);
 
         Stage stage = new Stage();
-        stage.setTitle("Edit Huella");
+        stage.setTitle("Editar Huella");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(root));
         stage.showAndWait();
 
-        // Refresh the main page after closing the modal
         refreshMainPage();
     }
 
@@ -362,6 +380,7 @@ public class PaginaPrincipalController extends Controller {
         }
     }
 
+
     @FXML
     private void openImpactoCarbonoModal() {
         try {
@@ -369,8 +388,11 @@ public class PaginaPrincipalController extends Controller {
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.setTitle("Impacto de Carbono");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.showAndWait();
+
+            refreshMainPage();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -386,8 +408,11 @@ public class PaginaPrincipalController extends Controller {
 
             Stage stage = new Stage();
             stage.setTitle("Hábitos del Usuario");
+            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.showAndWait();
+
+            refreshMainPage();
         } catch (Exception e) {
             e.printStackTrace();
         }

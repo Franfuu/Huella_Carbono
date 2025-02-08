@@ -3,11 +3,9 @@ package com.github.Franfuu.services;
 import com.github.Franfuu.model.dao.HuellaDAO;
 import com.github.Franfuu.model.dao.RecomendacionDAO;
 import com.github.Franfuu.model.entities.Huella;
-import com.github.Franfuu.model.entities.Recomendacion;
 import com.github.Franfuu.model.entities.Usuario;
 import com.github.Franfuu.utils.GenerarCSV;
 import com.github.Franfuu.utils.GenerarPDF;
-import com.github.Franfuu.utils.UsuarioSesion;
 import javafx.stage.Stage;
 
 import java.math.BigDecimal;
@@ -60,23 +58,15 @@ public class HuellaService {
         return huellaDAO.findByUsuarioAndFechaBetween(usuario, inicio, fin);
     }
 
-    public Map<String, BigDecimal> getAverageCarbonFootprintByCategory() {
-        List<Huella> huellas = huellaDAO.findAllByUsuario(UsuarioSesion.getInstance().getUserLogged());
-        return huellas.stream()
-                .collect(Collectors.groupingBy(
-                        huella -> huella.getIdActividad().getIdCategoria().getNombre(),
-                        Collectors.averagingDouble(huella -> huella.getValor().doubleValue())
-                ))
-                .entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> BigDecimal.valueOf(entry.getValue())));
-    }
 
     public Map<String, BigDecimal> getUserCarbonFootprintByCategory(Usuario usuario) {
-        List<Huella> huellas = huellaDAO.findAllByUsuario(usuario);
-        return huellas.stream()
+        List<Object[]> results = huellaDAO.findHuellaWithActividadAndCategoria(usuario);
+        return results.stream()
                 .collect(Collectors.groupingBy(
-                        huella -> huella.getIdActividad().getIdCategoria().getNombre(),
-                        Collectors.reducing(BigDecimal.ZERO, Huella::getValor, BigDecimal::add)
+                        result -> (String) result[2], // Nombre de la categoría
+                        Collectors.reducing(BigDecimal.ZERO,
+                                result -> ((BigDecimal) result[0]).multiply((BigDecimal) result[1]), // Valor de la huella * Factor de emisión
+                                BigDecimal::add)
                 ));
     }
 
