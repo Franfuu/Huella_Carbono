@@ -7,7 +7,22 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-
+/**
+ * Clase que representa una huella en el sistema.
+ *
+ * Tabla: huella
+ * Columnas:
+ * - id_registro: Identificador único del registro de huella.
+ * - id_usuario: Referencia al usuario que generó la huella.
+ * - id_actividad: Referencia a la actividad asociada con la huella.
+ * - valor: Valor de la huella.
+ * - unidad: Unidad de medida de la huella.
+ * - fecha: Fecha en que se registró la huella.
+ *
+ * Relaciones:
+ * - @ManyToOne con Usuario: Muchas huellas pueden pertenecer a un usuario.
+ * - @ManyToOne con Actividad: Muchas huellas pueden estar asociadas a una actividad.
+ */
 @Entity
 @Table(name = "huella", schema = "eco")
 public class Huella {
@@ -15,6 +30,10 @@ public class Huella {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_registro", nullable = false)
     private Integer id;
+
+    // Usamos EAGER para idUsuario e idActividad porque siempre necesitamos conocer el usuario
+    // y la actividad asociados con una huella cuando la cargamos. Esto evita múltiples consultas
+    // adicionales a la base de datos.
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_usuario")

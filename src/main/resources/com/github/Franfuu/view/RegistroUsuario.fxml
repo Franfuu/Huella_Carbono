@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.RegistroUsuarioController">
     <children>
-        <TextField fx:id="nameField" layoutX="400.0" layoutY="273.0" promptText="Name" />
-        <TextField fx:id="emailField" layoutX="400.0" layoutY="334.0" promptText="Email" />
-        <PasswordField fx:id="passwordField" layoutX="400.0" layoutY="396.0" promptText="Password" />
-        <Button fx:id="registerButton" layoutX="445.0" layoutY="461.0" text="Register" />
-        <Button fx:id="welcomeButton" layoutX="442.0" layoutY="527.0" onAction="#setWelcomeButton" text="Welcome" />
+        <TextField fx:id="nameField" layoutX="368.0" layoutY="146.0" />
+        <TextField fx:id="emailField" layoutX="368.0" layoutY="228.0" />
+        <PasswordField fx:id="passwordField" layoutX="371.0" layoutY="319.0" />
+        <Button fx:id="registerButton" layoutX="390.0" layoutY="379.0" text="Registrarse">
+         <font>
+            <Font size="17.0" />
+         </font></Button>
+        <Button fx:id="welcomeButton" layoutX="386.0" layoutY="518.0" onAction="#setWelcomeButton" prefHeight="32.0" prefWidth="113.0" text="Volver Atras">
+         <font>
+            <Font size="17.0" />
+         </font></Button>
+      <Label layoutX="368.0" layoutY="123.0" text="Nombre" />
+      <Label layoutX="368.0" layoutY="201.0" text="Email" />
+      <Label layoutX="368.0" layoutY="292.0" text="Contraseña" />
     </children>
 </AnchorPane>

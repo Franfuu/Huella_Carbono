@@ -4,6 +4,19 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
+/**
+ * Clase que representa una recomendación en el sistema.
+ *
+ * Tabla: recomendacion
+ * Columnas:
+ * - id_recomendacion: Identificador único de la recomendación.
+ * - id_categoria: Referencia a la categoría de la recomendación.
+ * - descripcion: Descripción de la recomendación.
+ * - impacto_estimado: Impacto estimado de la recomendación.
+ *
+ * Relaciones:
+ * - @ManyToOne con Categoria: Muchas recomendaciones pueden pertenecer a una categoría.
+ */
 @Entity
 @Table(name = "recomendacion", schema = "eco")
 public class Recomendacion {
@@ -11,6 +24,9 @@ public class Recomendacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_recomendacion", nullable = false)
     private Integer id;
+
+    // Usamos LAZY para idCategoria porque no siempre necesitamos cargar la categoría
+    // cuando cargamos una recomendación. Esto mejora el rendimiento.
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria")

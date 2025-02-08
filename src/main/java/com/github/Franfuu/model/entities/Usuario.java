@@ -7,6 +7,21 @@ import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Clase que representa a un usuario en el sistema.
+ *
+ * Tabla: usuario
+ * Columnas:
+ * - id_usuario: Identificador único del usuario.
+ * - nombre: Nombre del usuario.
+ * - email: Correo electrónico del usuario.
+ * - contraseña: Contraseña del usuario.
+ * - fecha_registro: Fecha de registro del usuario.
+ *
+ * Relaciones:
+ * - @OneToMany con Habito: Un usuario puede tener múltiples hábitos.
+ * - @OneToMany con Huella: Un usuario puede tener múltiples huellas.
+ */
 @Entity
 @Table(name = "usuario", schema = "eco")
 public class Usuario {

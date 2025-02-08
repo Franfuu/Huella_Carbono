@@ -5,13 +5,22 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.InicioSesionUsuarioController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.InicioSesionUsuarioController">
     <children>
-        <TextField fx:id="emailField" layoutX="200.0" layoutY="100.0" promptText="Email" />
-        <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="150.0" promptText="Password" />
-        <Button fx:id="loginButton" layoutX="210.0" layoutY="197.0" onAction="#login" text="Login" />
-        <Button fx:id="welcomeButton" layoutX="200.0" layoutY="250.0" onAction="#setWelcomeButton" text="Welcome" />
+        <TextField fx:id="emailField" layoutX="376.0" layoutY="211.0" />
+        <PasswordField fx:id="passwordField" layoutX="376.0" layoutY="316.0" />
+        <Button fx:id="loginButton" layoutX="390.0" layoutY="431.0" onAction="#login" text="Iniciar Sesión">
+         <font>
+            <Font size="17.0" />
+         </font></Button>
+        <Button fx:id="welcomeButton" layoutX="390.0" layoutY="538.0" onAction="#setWelcomeButton" prefHeight="38.0" prefWidth="121.0" text="Volver Atras">
+         <font>
+            <Font size="17.0" />
+         </font></Button>
+      <Label layoutX="376.0" layoutY="186.0" text="Email" />
+      <Label layoutX="376.0" layoutY="293.0" text="Contraseña" />
 
     </children>
 </AnchorPane>

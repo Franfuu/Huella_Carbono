@@ -8,10 +8,12 @@ import java.util.List;
 
 public class CategoriaDAO {
 
+    // Método para encontrar todas las categorías en la base de datos
     public List<Categoria> findAll() {
         Connection connection = Connection.getInstance();
         Session session = connection.getInstance().getSessionFactory();
         session.beginTransaction();
+        // Selecciona todas las categorías
         List<Categoria> categorias = session.createQuery("from Categoria", Categoria.class).list();
         session.getTransaction().commit();
         session.close();
