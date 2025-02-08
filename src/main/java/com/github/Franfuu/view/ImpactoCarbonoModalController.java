@@ -2,7 +2,7 @@ package com.github.Franfuu.view;
 
 import com.github.Franfuu.model.entities.Huella;
 import com.github.Franfuu.services.HuellaService;
-import com.github.Franfuu.utils.UsuarioSesion;
+import com.github.Franfuu.model.connection.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,6 +14,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ImpactoCarbonoModalController extends Controller {
     @Override
@@ -60,11 +62,18 @@ public class ImpactoCarbonoModalController extends Controller {
 
         List<Huella> huellas = huellaService.findByUsuarioAndFechaBetween(UsuarioSesion.getInstance().getUserLogged(), inicio, fin);
 
-        BigDecimal impactoTotal = huellas.stream()
-                .map(Huella::getValor)
+        Map<String, BigDecimal> impactoPorCategoria = huellas.stream()
+                .collect(Collectors.groupingBy(
+                        huella -> huella.getIdActividad().getIdCategoria().getNombre(),
+                        Collectors.reducing(BigDecimal.ZERO,
+                                huella -> huella.getValor().multiply(huella.getIdActividad().getIdCategoria().getFactorEmision()),
+                                BigDecimal::add)
+                ));
+
+        BigDecimal impactoTotal = impactoPorCategoria.values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        resultadoLabel.setText("Impacto de Carbono: " + impactoTotal.toString());
+        resultadoLabel.setText("Impacto de Carbono: " + impactoTotal + " kgCO2");
     }
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

@@ -1,4 +1,4 @@
-package com.github.Franfuu.utils;
+package com.github.Franfuu.model.connection;
 
 import com.github.Franfuu.model.entities.Usuario;
 

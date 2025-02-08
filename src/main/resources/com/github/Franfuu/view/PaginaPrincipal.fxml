@@ -7,14 +7,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.Franfuu.view.PaginaPrincipalController">
     <children>
-        <TableView fx:id="huellaTable" editable="true" layoutX="122.0" layoutY="109.0" prefHeight="382.0" prefWidth="600.0">
+        <TableView fx:id="huellaTable" layoutX="122.0" layoutY="109.0" prefHeight="382.0" prefWidth="600.0">
             <columns>
-                <TableColumn fx:id="idColumn" text="ID" />
-                <TableColumn fx:id="actividadColumn" text="Nombre" />
-                <TableColumn fx:id="valorColumn" text="Valor" />
-                <TableColumn fx:id="unidadColumn" text="Unidad" />
-                <TableColumn fx:id="fechaColumn" text="Fecha" />
-                <TableColumn fx:id="actionColumn" text="Action" />
+                <TableColumn fx:id="idColumn" prefWidth="34.0" text="ID" />
+                <TableColumn fx:id="actividadColumn" prefWidth="112.0" text="Nombre" />
+                <TableColumn fx:id="valorColumn" prefWidth="75.0" text="Valor" />
+                <TableColumn fx:id="unidadColumn" prefWidth="59.0" text="Unidad" />
+                <TableColumn fx:id="fechaColumn" prefWidth="88.0" text="Fecha" />
+                <TableColumn fx:id="actionColumn" prefWidth="112.0" text="Acciones" />
                 <TableColumn fx:id="recomendacionColumn" prefWidth="119.20001220703125" text="Recomendaciones" />
             </columns>
         </TableView>
@@ -23,6 +23,7 @@
         <Button fx:id="addHuellaButton" layoutX="335.0" layoutY="41.0" text="Agregar Huella" />
         <Button fx:id="verHabitosButton" layoutX="238.0" layoutY="41.0" text="Ver Hábitos" />
         <Button fx:id="editUserButton" layoutX="755.0" layoutY="41.0" text="Mi Perfil" />
+        <Button fx:id="compararUsuariosButton" layoutX="109.0" layoutY="524.0" onAction="#openCompararUsuarios" text="Comparar Usuarios" />
         <Button fx:id="generateDocumentationButton" layoutX="116.0" layoutY="41.0" text="Generar Reporte" />
         <Button fx:id="calcularImpactoButton" layoutX="575.0" layoutY="41.0" onAction="#openImpactoCarbonoModal" text="Ver Impacto de Carbono" />
     </children>

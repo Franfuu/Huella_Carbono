@@ -1,18 +1,15 @@
 package com.github.Franfuu.view;
 
-import com.github.Franfuu.App;
 import com.github.Franfuu.model.dao.ActividadDAO;
 import com.github.Franfuu.model.entities.Actividad;
 import com.github.Franfuu.model.entities.Huella;
 import com.github.Franfuu.services.HuellaService;
-import com.github.Franfuu.utils.UsuarioSesion;
-import javafx.collections.FXCollections;
+import com.github.Franfuu.model.connection.UsuarioSesion;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -33,7 +30,6 @@ public class AgregarHuellaController extends Controller {
 
     @Override
     public void onOpen(Object input) throws Exception {
-        actividadComboBox.getItems().addAll(loadActividades());
     }
 
     @Override
@@ -42,13 +38,20 @@ public class AgregarHuellaController extends Controller {
 
     @FXML
     private void initialize() {
+        loadActividades();
         saveButton.setOnAction(event -> saveHuella());
     }
 
+    private void loadActividades() {
+        ActividadDAO actividadDAO = new ActividadDAO();
+        List<Actividad> actividades = actividadDAO.findAll();
+        actividadComboBox.getItems().addAll(actividades);
+    }
 
     @FXML
     private void saveHuella() {
-        if (actividadComboBox.getValue() == null) {
+        Actividad actividad = actividadComboBox.getValue();
+        if (actividad == null) {
             showAlert(Alert.AlertType.WARNING, "Advertencia", "Por favor, seleccione una actividad.");
             return;
         }
@@ -71,7 +74,7 @@ public class AgregarHuellaController extends Controller {
 
         Huella huella = new Huella();
         huella.setIdUsuario(UsuarioSesion.getInstance().getUserLogged());
-        huella.setIdActividad(actividadComboBox.getValue());
+        huella.setIdActividad(actividad);
         huella.setValor(new BigDecimal(valorField.getText()));
         huella.setUnidad(unidadField.getText());
         huella.setFecha(fechaPicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -80,7 +83,6 @@ public class AgregarHuellaController extends Controller {
 
         showAlert(Alert.AlertType.INFORMATION, "Éxito", "Huella agregada correctamente.");
 
-        // Close the modal
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
     }
@@ -91,10 +93,5 @@ public class AgregarHuellaController extends Controller {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private List<Actividad> loadActividades() {
-        ActividadDAO actividadDAO = new ActividadDAO();
-        return actividadDAO.findAll();
     }
 }
